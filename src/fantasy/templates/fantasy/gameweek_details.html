@@ -1,0 +1,100 @@
+{% extends "fantasy/base.html" %}
+{% block title %}{{ gameweek.name }}{% endblock %}
+
+{% block content %}
+
+<!-- Gameweek Header -->
+<div class="row mt-4 mb-3">
+    <div class="col-md-12 text-center">
+        <h1 class="fw-bold">{{ gameweek.name }}</h1>
+        <p class="lead text-muted">
+            Deadline: {{ gameweek.deadline_time|date:"d M Y, H:i" }}
+        </p>
+    </div>
+</div>
+
+{% if fixtures %}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h3 class="mb-3">Fixtures</h3>
+        <div class="table-responsive shadow-sm">
+            <table class="table table-hover align-middle">
+                <thead class="table-primary">
+                    <tr>
+                        <th class="text-end">Home</th>
+                        <th class="text-center">Score</th>
+                        <th class="text-start">Away</th>
+                        <th class="text-center">Kickoff</th>
+                        <th class="text-center">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fixture in fixtures %}
+                    <tr>
+                        <!-- Home Team with link -->
+                        <td class="text-end fw-semibold">
+                            <a href="{% url 'team_details' fixture.home_team_code %}" class="text-decoration-none text-dark">
+                                {{ fixture.home_team }}
+                            </a>
+                        </td>
+
+                        <!-- Score -->
+                        <td class="text-center">
+                            {% if fixture.finished %}
+                                <strong>{{ fixture.home_score }} - {{ fixture.away_score }}</strong>
+                            {% else %}
+                                vs
+                            {% endif %}
+                        </td>
+
+                        <!-- Away Team with link -->
+                        <td class="text-start fw-semibold">
+                            <a href="{% url 'team_details' fixture.away_team_code %}" class="text-decoration-none text-dark">
+                                {{ fixture.away_team }}
+                            </a>
+                        </td>
+
+                        <!-- Kickoff -->
+                        <td class="text-center">{{ fixture.kickoff_time|date:"d M Y, H:i" }}</td>
+
+                        <!-- Status -->
+                        <td class="text-center">
+                            {% if fixture.finished %}
+                                <span class="badge bg-success">
+                                    <i class="bi bi-check-circle-fill me-1"></i>Finished
+                                </span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">
+                                    <i class="bi bi-clock-fill me-1"></i>Upcoming
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="alert alert-info shadow-sm d-flex align-items-center">
+            <i class="bi bi-info-circle me-2"></i>
+            No fixtures available for this gameweek.
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Back Button -->
+<div class="row mt-4 mb-4">
+    <div class="col-md-12">
+        <a href="{% url 'gameweeks' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left-circle me-1"></i> Back to Game Weeks
+        </a>
+    </div>
+</div>
+
+{% endblock %}

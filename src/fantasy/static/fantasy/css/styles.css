@@ -1,0 +1,62 @@
+/* Base typography */
+body {
+    font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif;
+    color: #212529;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #ffffff !important;
+}
+
+.navbar-brand {
+    font-size: 1.05rem;
+}
+
+.navbar-nav .nav-link {
+    color: #495057;
+    font-weight: 500;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #0d6efd;
+}
+
+.navbar-nav .nav-link.active {
+    color: #0d6efd;
+    border-bottom: 2px solid #0d6efd;
+}
+
+/* Footer */
+footer {
+    font-size: 0.85rem;
+}
+
+/* Cards */
+.card {
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* Buttons */
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+/* Status badges */
+.badge {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.badge.bg-success { background-color: #2f9e44 !important; }
+.badge.bg-danger  { background-color: #e03131 !important; }
+.badge.bg-warning { background-color: #fab005 !important; color: #000; }
+.badge.bg-secondary { background-color: #868e96 !important; }

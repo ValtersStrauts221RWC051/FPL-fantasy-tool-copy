@@ -1,0 +1,18 @@
+name: Update FPL Data
+
+on:
+  workflow_dispatch:   # manual trigger
+  schedule:
+    - cron: "0 * * * *"   # every 1 hour (UTC)
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Render cron endpoint
+        env:
+          CRON_TOKEN: ${{ secrets.FPL_CRON_TOKEN }}
+        run: |
+          URL="https://django-web-660y.onrender.com/cron/update_fpl/$CRON_TOKEN/"
+          echo "Calling $URL"
+          curl -s -o /dev/null -w "%{http_code}" "$URL"

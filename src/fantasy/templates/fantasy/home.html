@@ -1,0 +1,87 @@
+{% extends "fantasy/base.html" %}
+{% block title %}Fantasy Premier League Assistant{% endblock %}
+{% block content %}
+
+<div class="row mt-5 text-center">
+    <div class="col-md-12">
+        <h1 class="display-4 fw-bold">Welcome to Fantasy Premier League Assistant</h1>
+        <p class="lead text-muted">Manage your fantasy football team with AI-powered predictions and insights</p>
+    </div>
+</div>
+
+<div class="row mt-5 g-4">
+    <!-- My Squad -->
+    <div class="col-md-4">
+        <div class="card h-100 card-hover border-primary">
+            <div class="card-body text-center">
+                <i class="bi bi-people-fill display-3 text-primary mb-3"></i>
+                <h5 class="card-title fw-bold">My Squad</h5>
+                <p class="card-text text-muted">View and manage your fantasy team, set captains, and check your squad value.</p>
+                <a href="{% url 'squad' %}" class="btn btn-primary">View Squad</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Players -->
+    <div class="col-md-4">
+        <div class="card h-100 card-hover border-success">
+            <div class="card-body text-center">
+                <i class="bi bi-person-badge-fill display-3 text-success mb-3"></i>
+                <h5 class="card-title fw-bold">Players</h5>
+                <p class="card-text text-muted">Browse all Premier League players with their stats, positions, and prices.</p>
+                <a href="{% url 'players' %}" class="btn btn-success">View Players</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teams -->
+    <div class="col-md-4">
+        <div class="card h-100 card-hover border-dark">
+            <div class="card-body text-center">
+                <i class="bi bi-shield-fill display-3 text-dark mb-3"></i>
+                <h5 class="card-title fw-bold">Teams</h5>
+                <p class="card-text text-muted">
+                    Browse Premier League teams, check their strengths, and view points.
+                </p>
+                <a href="{% url 'teams' %}" class="btn btn-dark">View Teams</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4 mb-5 g-4 justify-content-center">
+    <!-- Transfers -->
+    <div class="col-md-4">
+        <div class="card h-100 card-hover border-warning">
+            <div class="card-body text-center">
+                <i class="bi bi-arrow-repeat display-3 text-warning mb-3"></i>
+                <h5 class="card-title fw-bold">Transfers</h5>
+                <p class="card-text text-muted">
+                    View Transfer Recommendations to improve your team.
+                    Use your free transfers wisely!
+                </p>
+                <a href="{% url 'transfers' %}" class="btn btn-warning text-dark">
+                    View Transfer Recommendations
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Weeks -->
+    <div class="col-md-4">
+        <div class="card h-100 card-hover border-secondary">
+            <div class="card-body text-center">
+                <i class="bi bi-calendar-week-fill display-3 text-secondary mb-3"></i>
+                <h5 class="card-title fw-bold">Game Weeks</h5>
+                <p class="card-text text-muted">
+                    Check fixtures, deadlines, and results for each game week.
+                </p>
+                <a href="{% url 'gameweeks' %}" class="btn btn-secondary">
+                    View Game Weeks
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

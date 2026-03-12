@@ -1,0 +1,175 @@
+{% extends "fantasy/base.html" %}
+{% block title %}Transfers{% endblock %}
+
+{% block content %}
+<div class="row mt-4 mb-3">
+    <div class="col-md-12 text-center">
+        <h1 class="fw-bold">Transfers</h1>
+        <p class="lead text-muted">Manage your squad transfers and improve your team.</p>
+    </div>
+</div>
+
+{% if error_message %}
+<div class="row mb-3 justify-content-center">
+    <div class="col-md-8">
+        <div class="alert alert-danger shadow-sm d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            {{ error_message }}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+
+
+<!-- Budget + free transfers -->
+<div class="row g-3 mb-4 justify-content-center">
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <p class="text-muted mb-1">Bank</p>
+                    <h5 class="card-title mb-0 text-success">£{{ budget|floatformat:1 }}</h5>
+                </div>
+                <div class="text-end">
+                    <p class="text-muted mb-1">Free Transfers</p>
+                    <h5 class="card-title mb-0">{{ free_transfers }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Top predicted players -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                Highest projected performers (predicted)
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Team</th>
+                                <th>Position</th>
+                                <th class="text-center">Predicted GW Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for player in top_predicted_players %}
+                            <tr>
+                                <td>{{ player.web_name }}</td>
+                                <td>{{ player.team }}</td>
+                                <td>{{ player.position }}</td>
+                                <td class="text-center fw-semibold text-primary">{{ player.predicted_score }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">No player data available yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recommended transfers -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-success text-white">
+                Transfers with highest predicted gameweek score increase
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Out</th>
+                                <th>In</th>
+                                <th class="text-center">Expected Gain</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rec in recommended_transfers %}
+                            <tr>
+                                <td>{{ rec.out_player.web_name }} ({{ rec.out_player.team }}) — £{{ rec.out_player.price|floatformat:1 }}</td>
+                                <td>{{ rec.in_player.web_name }} ({{ rec.in_player.team }}) — £{{ rec.in_player.price|floatformat:1 }}</td>
+                                <td class="text-center">
+                                    <span class="badge bg-success">{{ rec.expected_gain }} pts</span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">Recommendations will appear once player data is loaded.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Strategy planner -->
+<div class="row g-3 mb-4">
+    {% for strat in strategies %}
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-header bg-light">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">{{ strat.name }} plan</h5>
+                    <span class="badge bg-secondary">{{ strat.transfer_limit }}</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="fw-semibold mb-1">Expected gain: <span class="text-primary">{{ strat.expected_points }} pts</span></p>
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <thead>
+                            <tr>
+                                <th>GW</th>
+                                <th>Transfer</th>
+                                <th class="text-end">Gain</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for step in strat.plan %}
+                            <tr>
+                                <td>{{ step.gameweek }}</td>
+                                <td>
+                                    {{ step.out_player.web_name }} → {{ step.in_player.web_name }}
+                                </td>
+                                <td class="text-end">{{ step.expected_gain }} pts</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">No eligible transfers found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Action Buttons -->
+<div class="row g-3 mt-4 mb-4 justify-content-center">
+    <div class="col-md-3 col-6">
+        <a href="{% url 'squad' %}" class="btn btn-outline-secondary w-100">
+            <i class="bi bi-arrow-left-circle me-1"></i> Back to Squad
+        </a>
+    </div>
+</div>
+{% endblock %}

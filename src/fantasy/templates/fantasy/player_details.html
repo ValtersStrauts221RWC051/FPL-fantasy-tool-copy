@@ -1,0 +1,168 @@
+{% extends "fantasy/base.html" %}
+{% load static %}
+{% block title %}Player Details{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <!-- Player photo + basic info -->
+    <div class="col-md-4 text-center">
+        <div class="card shadow-sm p-3">
+            <img
+                src="https://resources.premierleague.com/premierleague/photos/players/250x250/{{ player.player_code }}.png"
+                alt="{{ player.web_name }}"
+                class="img-fluid rounded mb-3"
+                data-placeholder="{% static 'fantasy/images/player_placeholder.png' %}"
+                onerror="this.onerror=null; this.src=this.dataset.placeholder;"
+            >
+
+            <h4 class="fw-bold mb-0">
+                {{ player.first_name }} {{ player.second_name }}
+            </h4>
+            <small class="text-muted">({{ player.web_name }})</small>
+
+            <p class="mt-2 mb-1">
+                {{ player.position.name }} · {{ player.team.name }}
+            </p>
+
+            {% if player.status == "a" %}
+                <span class="badge bg-success">Available</span>
+            {% elif player.status == "i" %}
+                <span class="badge bg-danger">Injured</span>
+            {% elif player.status == "d" %}
+                <span class="badge bg-warning text-dark">Doubtful</span>
+            {% elif player.status == "u" %}
+                <span class="badge bg-secondary">Unavailable</span>
+            {% else %}
+                <span class="badge bg-info">Not in squad</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Player stats -->
+    <div class="col-md-8">
+        <div class="card shadow-sm p-4">
+            <h4 class="fw-bold mb-3">Overview</h4>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Price:</strong> £{{ player.price }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Total Points:</strong> {{ player.total_points }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Form:</strong> {{ player.form }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Points per Game:</strong> {{ player.points_per_game }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Next GW Pts (predicted):</strong> {{ player.predicted_score }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <h4 class="fw-bold mt-4">Season Stats</h4>
+            <table class="table table-bordered mt-2">
+                <tbody>
+                    <tr><th>Minutes</th><td>{{ player.minutes }}</td></tr>
+
+                    {# ================= GOALKEEPER ================= #}
+                    {% if player.position.name == "Goalkeeper" %}
+                        <tr><th>Assists</th><td>{{ player.assists }}</td></tr>
+                        <tr><th>Clean Sheets</th><td>{{ player.clean_sheets }}</td></tr>
+                        <tr><th>Goals Conceded</th><td>{{ player.goals_conceded }}</td></tr>
+                        <tr><th>Own Goals</th><td>{{ player.own_goals }}</td></tr>
+                        <tr><th>Penalties Saved</th><td>{{ player.penalties_saved }}</td></tr>
+                        <tr><th>Penalties Missed</th><td>{{ player.penalties_missed }}</td></tr>
+                        <tr><th>Yellow Cards</th><td>{{ player.yellow_cards }}</td></tr>
+                        <tr><th>Red Cards</th><td>{{ player.red_cards }}</td></tr>
+                        <tr><th>Saves</th><td>{{ player.saves }}</td></tr>
+                        <tr><th>Bonus</th><td>{{ player.bonus }}</td></tr>
+                        <tr><th>BPS</th><td>{{ player.bps }}</td></tr>
+                        <tr><th>Influence</th><td>{{ player.influence }}</td></tr>
+                        <tr><th>Creativity</th><td>{{ player.creativity }}</td></tr>
+                        <tr><th>Threat</th><td>{{ player.threat }}</td></tr>
+                        <tr><th>Defensive Contribution</th><td>{{ player.defensive_contribution }}</td></tr>
+                        <tr><th>xA</th><td>{{ player.expected_assists }}</td></tr>
+                        <tr><th>xGI</th><td>{{ player.expected_goal_involvements }}</td></tr>
+                        <tr><th>xGC</th><td>{{ player.expected_goals_conceded }}</td></tr>
+                        <tr><th>Form</th><td>{{ player.form }}</td></tr>
+
+                    {# ================= DEFENDER ================= #}
+                    {% elif player.position.name == "Defender" %}
+                        <tr><th>Goals</th><td>{{ player.goals_scored }}</td></tr>
+                        <tr><th>Assists</th><td>{{ player.assists }}</td></tr>
+                        <tr><th>Clean Sheets</th><td>{{ player.clean_sheets }}</td></tr>
+                        <tr><th>Goals Conceded</th><td>{{ player.goals_conceded }}</td></tr>
+                        <tr><th>Own Goals</th><td>{{ player.own_goals }}</td></tr>
+                        <tr><th>Penalties Missed</th><td>{{ player.penalties_missed }}</td></tr>
+                        <tr><th>Yellow Cards</th><td>{{ player.yellow_cards }}</td></tr>
+                        <tr><th>Red Cards</th><td>{{ player.red_cards }}</td></tr>
+                        <tr><th>Bonus</th><td>{{ player.bonus }}</td></tr>
+                        <tr><th>BPS</th><td>{{ player.bps }}</td></tr>
+                        <tr><th>Influence</th><td>{{ player.influence }}</td></tr>
+                        <tr><th>Creativity</th><td>{{ player.creativity }}</td></tr>
+                        <tr><th>Threat</th><td>{{ player.threat }}</td></tr>
+                        <tr><th>Defensive Contribution</th><td>{{ player.defensive_contribution }}</td></tr>
+                        <tr><th>xG</th><td>{{ player.expected_goals }}</td></tr>
+                        <tr><th>xA</th><td>{{ player.expected_assists }}</td></tr>
+                        <tr><th>xGI</th><td>{{ player.expected_goal_involvements }}</td></tr>
+                        <tr><th>xGC</th><td>{{ player.expected_goals_conceded }}</td></tr>
+                        <tr><th>Form</th><td>{{ player.form }}</td></tr>
+
+                    {# ================= MIDFIELDER ================= #}
+                    {% elif player.position.name == "Midfielder" %}
+                        <tr><th>Goals</th><td>{{ player.goals_scored }}</td></tr>
+                        <tr><th>Assists</th><td>{{ player.assists }}</td></tr>
+                        <tr><th>Clean Sheets</th><td>{{ player.clean_sheets }}</td></tr>
+                        <tr><th>Own Goals</th><td>{{ player.own_goals }}</td></tr>
+                        <tr><th>Penalties Missed</th><td>{{ player.penalties_missed }}</td></tr>
+                        <tr><th>Yellow Cards</th><td>{{ player.yellow_cards }}</td></tr>
+                        <tr><th>Red Cards</th><td>{{ player.red_cards }}</td></tr>
+                        <tr><th>Bonus</th><td>{{ player.bonus }}</td></tr>
+                        <tr><th>BPS</th><td>{{ player.bps }}</td></tr>
+                        <tr><th>Influence</th><td>{{ player.influence }}</td></tr>
+                        <tr><th>Creativity</th><td>{{ player.creativity }}</td></tr>
+                        <tr><th>Threat</th><td>{{ player.threat }}</td></tr>
+                        <tr><th>Defensive Contribution</th><td>{{ player.defensive_contribution }}</td></tr>
+                        <tr><th>xG</th><td>{{ player.expected_goals }}</td></tr>
+                        <tr><th>xA</th><td>{{ player.expected_assists }}</td></tr>
+                        <tr><th>xGI</th><td>{{ player.expected_goal_involvements }}</td></tr>
+                        <tr><th>xGC</th><td>{{ player.expected_goals_conceded }}</td></tr>
+                        <tr><th>Form</th><td>{{ player.form }}</td></tr>
+
+                    {# ================= FORWARD ================= #}
+                    {% elif player.position.name == "Forward" %}
+                        <tr><th>Goals</th><td>{{ player.goals_scored }}</td></tr>
+                        <tr><th>Assists</th><td>{{ player.assists }}</td></tr>
+                        <tr><th>Own Goals</th><td>{{ player.own_goals }}</td></tr>
+                        <tr><th>Penalties Missed</th><td>{{ player.penalties_missed }}</td></tr>
+                        <tr><th>Yellow Cards</th><td>{{ player.yellow_cards }}</td></tr>
+                        <tr><th>Red Cards</th><td>{{ player.red_cards }}</td></tr>
+                        <tr><th>Bonus</th><td>{{ player.bonus }}</td></tr>
+                        <tr><th>BPS</th><td>{{ player.bps }}</td></tr>
+                        <tr><th>Influence</th><td>{{ player.influence }}</td></tr>
+                        <tr><th>Creativity</th><td>{{ player.creativity }}</td></tr>
+                        <tr><th>Threat</th><td>{{ player.threat }}</td></tr>
+                        <tr><th>Defensive Contribution</th><td>{{ player.defensive_contribution }}</td></tr>
+                        <tr><th>xG</th><td>{{ player.expected_goals }}</td></tr>
+                        <tr><th>xA</th><td>{{ player.expected_assists }}</td></tr>
+                        <tr><th>xGI</th><td>{{ player.expected_goal_involvements }}</td></tr>
+                        <tr><th>xGC</th><td>{{ player.expected_goals_conceded }}</td></tr>
+                        <tr><th>Form</th><td>{{ player.form }}</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+
+
+            <a href="{% url 'players' %}" class="btn btn-secondary mt-3">
+                ← Back to Players
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

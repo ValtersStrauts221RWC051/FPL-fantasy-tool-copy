@@ -1,0 +1,26 @@
+{% extends "fantasy/base.html" %}
+{% block title %}Set FPL Team ID{% endblock %}
+
+{% block content %}
+<div class="row mt-5 justify-content-center">
+    <div class="col-lg-6 col-md-8">
+        <div class="card shadow-sm border-primary">
+            <div class="card-body">
+                <h2 class="fw-bold mb-3">Connect Your FPL Team</h2>
+                <p class="text-muted mb-4">Enter your official Fantasy Premier League team ID to load your live squad.</p>
+                <form method="post" class="row g-3">
+                    {% csrf_token %}
+                    <div class="col-12">
+                        <label for="entry_id" class="form-label fw-semibold">FPL Team ID</label>
+                        <input type="number" class="form-control" id="entry_id" name="entry_id" required>
+                    </div>
+                    <div class="col-12 d-flex gap-2">
+                        <a class="btn btn-outline-secondary" href="{% url 'home' %}">Cancel</a>
+                        <button type="submit" class="btn btn-outline-primary ms-auto">Save & View Squad</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

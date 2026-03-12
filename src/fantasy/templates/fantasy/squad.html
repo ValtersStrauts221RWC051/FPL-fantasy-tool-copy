@@ -1,0 +1,161 @@
+{% extends "fantasy/base.html" %}
+{% block title %}My Squad{% endblock %}
+
+{% block content %}
+<div class="row mt-4 mb-2">
+    <div class="col-md-12 text-center">
+        <h1 class="fw-bold">My Squad</h1>
+        <p class="lead text-muted">Live view of your official Fantasy Premier League team.</p>
+    </div>
+</div>
+
+{% if error_message %}
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="alert alert-danger shadow-sm d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            {{ error_message }}
+            <a class="btn btn-link ms-auto" href="{% url 'set_entry' %}">Set FPL ID</a>
+        </div>
+    </div>
+</div>
+{% elif squad %}
+
+<!-- Squad Meta -->
+<div class="row g-3 mb-3">
+    <div class="col-md-3 col-12">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <p class="text-muted mb-1">Team</p>
+                <h5 class="card-title mb-0">{{ meta.team_name|default:"FPL Team" }}</h5>
+                <small class="text-muted">Entry ID: {{ meta.entry_id }}</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-12">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <p class="text-muted mb-1">Gameweek</p>
+                <h5 class="card-title mb-0">{{ meta.gameweek_name|default:"Current" }}</h5>
+                <small class="text-muted">GW #{{ meta.gameweek }}</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-12">
+        <div class="card shadow-sm h-100">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <p class="text-muted mb-1">Squad Value</p>
+                    <h5 class="card-title mb-0">£{{ meta.value|default:0 }}</h5>
+                </div>
+                <div class="text-end">
+                    <p class="text-muted mb-1">Bank</p>
+                    <h5 class="card-title mb-0 text-success">£{{ meta.bank|default:0 }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-12">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <p class="text-muted mb-1">Free Transfers</p>
+                <h5 class="card-title mb-0">{{ meta.free_transfers|default:0 }}</h5>
+                <small class="text-muted">Calculated from history</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Squad Table -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="table-responsive shadow-sm">
+            <table class="table table-hover align-middle">
+                <colgroup>
+                    <col style="width: 200px;">
+                    <col style="width: 120px;">
+                    <col style="width: 75px;">
+                    <col style="width: 75px;">
+                    <col style="width: 120px;">
+                    <col style="width: 100px;">
+                    <col style="width: 100px;">
+                </colgroup>
+
+                <thead class="table-primary">
+                    <tr>
+                        <th>Player</th>
+                        <th>Team</th>
+                        <th>Position</th>
+                        <th class="text-center">GW Pts</th>
+                        <th class="text-center">Next GW Pts (pred.)</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Captain</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for player in squad %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'player_details' player.id %}" class="text-decoration-none fw-semibold">
+                                {{ player.name }}
+                            </a>
+                        </td>
+                        <td>{{ player.team }}</td>
+                        <td>{{ player.position }}</td>
+
+                        <td class="text-center">
+                            <span class="badge bg-success">{{ player.points }}</span>
+                        </td>
+
+                        <td class="text-center text-primary fw-semibold">
+                            {% with pred=player.predicted_points %}
+                                {{ pred|default:"-" }}
+                            {% endwith %}
+                        </td>
+
+                        <td class="text-center">
+                            {% if player.is_starting %}
+                                <span class="badge bg-primary">Starting</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Bench</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="text-center">
+                            {% if player.is_captain %}
+                                <span class="badge bg-warning text-dark">⭐ Captain</span>
+                            {% elif player.is_vice_captain %}
+                                <span class="badge bg-secondary text-dark">⭐ Vice</span>
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="alert alert-info shadow-sm d-flex align-items-center">
+            <i class="bi bi-info-circle me-2"></i>
+            No squad data available. Squad information will be loaded from the database.
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Action Buttons -->
+<div class="row mt-4 mb-4 g-3 justify-content-center">
+    <div class="col-md-4 col-12">
+        <a href="{% url 'transfers' %}" class="btn btn-outline-primary w-100">
+            <i class="bi bi-arrow-left-right me-1"></i> View Transfer Recommendations
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "fantasy/base.html" %}
+{% block title %}Teams{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="fw-bold mb-1">Premier League Teams</h1>
+        <p class="text-muted mb-0">
+            Browse teams and compare their strengths
+        </p>
+    </div>
+</div>
+
+<!-- Search -->
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <input
+            type="text"
+            id="team-search"
+            class="form-control"
+            placeholder="Search team..."
+            value="{{ query }}"
+        >
+    </div>
+</div>
+
+{% if teams %}
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" id="teams-table">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Team</th>
+                        <th>Short</th>
+                        <th class="text-center">Strength</th>
+                        <th class="text-center">Home</th>
+                        <th class="text-center">Away</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for team in teams %}
+                    <tr class="clickable-row" onclick="window.location='{% url 'team_details' team.fpl_id %}';" style="cursor:pointer;">
+                        <td class="fw-semibold" data-name="{{ team.name|lower }}">{{ team.name }}</td>
+                        <td>{{ team.short_name|lower }}</td>
+                        <td class="text-center">{{ team.strength }}</td>
+                        <td class="text-center">{{ team.strength_overall_home }}</td>
+                        <td class="text-center">{{ team.strength_overall_away }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info shadow-sm">
+    <i class="bi bi-info-circle"></i>
+    No teams found.
+</div>
+{% endif %}
+
+<!-- JS for live search -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.getElementById("team-search");
+    const rows = document.querySelectorAll("#teams-table tbody tr");
+
+    searchInput.addEventListener("input", function() {
+        const query = searchInput.value.toLowerCase();
+
+        rows.forEach(row => {
+            const teamName = row.querySelector("td[data-name]").dataset.name;
+            row.style.display = teamName.includes(query) ? "" : "none";
+        });
+    });
+});
+</script>
+
+{% endblock %}

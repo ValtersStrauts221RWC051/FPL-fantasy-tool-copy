@@ -1,0 +1,111 @@
+@startuml
+title Premjerlīgas fantāzijas rīks — UML domēna modelis
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+
+class User as "Lietotājs" {
+    +lietotājaId: UUID
+    +ePasts: String
+    +parādāmaisVārds: String
+    +izveidots: DateTime
+}
+
+package "Fantāzijas kodols" {
+    class Player as "Spēlētājs" {
+      +id: Int
+      +vārds: String
+      +pozīcija: String
+      +cena: Decimal
+    }
+
+  package "Komandas un kalendārs" {
+    class Team as "Komanda" {
+      +id: Int
+      +nosaukums: String
+      +īsaisNosaukums: String
+    }
+
+    class GameWeek as "SpēļuNedēļa" {
+      +numurs: Int
+      +termiņš: DateTime
+    }
+
+    class Fixture as "Spēle" {
+      +id: Int
+      +sākums: DateTime
+      +mājinieki: Team
+      +viesi: Team
+    }
+  }
+
+  package "Sastāvs un izvēles" {
+    class Squad as "Sastāvs" {
+      +id: UUID
+      +nosaukums: String
+      +vērtība: Decimal
+    }
+
+    class Selection as "Izvēle" {
+      +spēļuNedēļa: Int
+      +kapteinis: Player
+      +vicekapteinis: Player
+    }
+
+    class Transfer as "Transfer" {
+      +id: UUID
+      +laiks: DateTime
+      +izmaksas: Int
+    }
+
+    class Bonus as "Bonuss" {
+      +tips: String
+      +aktivizēts: DateTime
+    }
+  }
+  
+  package "Prognozes" {
+    class ForecastService as "PrognozēšanasServiss" {
+      +modelis: String
+      +pēdējāAtjaunošana: DateTime
+    }
+    
+    class PredictedPerformance as "PrognozētāVeiktspēja" {
+      +spēlētājs: Player
+      +spēļuNedēļa: Int
+      +paredzētiePunkti: Decimal
+    }
+    
+    class TransferCalculator as "TransfēruKalkulators" {
+      +budžets: Decimal
+      +brīvieTransfēri: Int
+      +transfēraCena: Int
+
+    }
+    
+    class Recommendation as "Ieteikums" {
+      +apraksts: String
+      +gaidāmiePunkti: Decimal
+    }
+  }
+}
+
+Squad "1" o-- "1..*" Player
+Player "*" --> "1" Team
+GameWeek "1" o-- "*" Fixture
+Selection "*" --> "1" Squad
+Transfer "*" o-- "1" Squad
+Bonus "*" o-- "1" Squad
+User "1" -- "1" Squad
+
+ForecastService "1" ..> "*" PredictedPerformance
+ForecastService "*" ..> "*" Player
+PredictedPerformance "*" --> "1" Player
+PredictedPerformance "*" --> "1" GameWeek
+TransferCalculator "1" ..> "1" Squad
+TransferCalculator "1" ..> "*" PredictedPerformance
+TransferCalculator "1" ..> "*" Recommendation
+Recommendation "*" --> "1" Player
+User "1" ..> "*" ForecastService
+@enduml

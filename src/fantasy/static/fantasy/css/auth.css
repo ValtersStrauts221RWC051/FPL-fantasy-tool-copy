@@ -1,0 +1,83 @@
+/* Background - light neutral */
+.auth-bg {
+    background-color: #f8f9fa;
+    position: relative;
+}
+
+/* Optional subtle pattern behind card */
+.bg-pattern {
+    background-color: #165692;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 200px 200px;
+    opacity: 0.05;
+    z-index: 0;
+}
+
+/* Card container */
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 1rem;
+}
+
+/* Card styling */
+.auth-card .card {
+    border-radius: 1rem;
+    transition: box-shadow 0.25s ease;
+    z-index: 2;
+}
+
+.auth-card .card:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* Input styling */
+.auth-card .form-control {
+    border-radius: 0.5rem;
+    border: 1px solid #ced4da;
+    transition: all 0.25s ease;
+}
+
+.auth-card .form-control:focus {
+    border-color: #495057;
+    box-shadow: 0 0 0 0.2rem rgba(73, 80, 87, 0.15);
+}
+
+/* Button styling */
+.auth-card .btn-dark {
+    background-color: #343a40;
+    border-color: #343a40;
+    transition: all 0.25s ease;
+}
+
+.auth-card .btn-dark:hover {
+    background-color: #23272b;
+    border-color: #23272b;
+}
+
+/* Header text */
+h1.display-6 {
+    font-size: 2.5rem;
+}
+
+/* Links */
+.auth-card a {
+    text-decoration: none;
+}
+
+.auth-card a:hover {
+    text-decoration: underline;
+}
+
+/* Alert */
+.auth-card .alert {
+    font-size: 0.85rem;
+}
+
+/* Labels & text color */
+.auth-card label, 
+.auth-card h3, 
+.auth-card p {
+    color: #495057;
+}

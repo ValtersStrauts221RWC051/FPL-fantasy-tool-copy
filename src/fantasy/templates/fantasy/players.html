@@ -1,0 +1,128 @@
+{% extends "fantasy/base.html" %}
+{% block title %}Players{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-md-12 text-center">
+        <h1 class="fw-bold">All Players</h1>
+        <p class="lead text-muted">Search, filter, and browse Premier League players</p>
+    </div>
+</div>
+
+<!-- Search and filters -->
+<div class="row mt-3 mb-4 g-3 justify-content-center">
+    <div class="col-md-4">
+        <input
+            type="text"
+            id="player-search"
+            class="form-control"
+            placeholder="Search player by name..."
+        >
+    </div>
+
+    <div class="col-md-3">
+        <select id="team-filter" class="form-select">
+            <option value="">All Teams</option>
+            {% for team in teams %}
+            <option value="{{ team.name|lower }}">{{ team.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <select id="position-filter" class="form-select">
+            <option value="">All Positions</option>
+            {% for pos in positions %}
+            <option value="{{ pos.name|lower }}">{{ pos.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+<!-- Players Grid -->
+<div class="row g-4" id="players-grid">
+    {% for player in players %}
+    <div
+        class="col-md-3 player-card"
+        data-first="{{ player.first_name|lower }}"
+        data-second="{{ player.second_name|lower }}"
+        data-web="{{ player.web_name|lower }}"
+        data-team="{{ player.team.name|lower }}"
+        data-position="{{ player.position.name|lower }}"
+    >
+        <div class="card h-100 shadow-sm card-hover text-center p-3">
+            <div class="card-body">
+
+                <!-- Player name -->
+                <h5 class="card-title fw-bold mb-1">{{ player.web_name }}</h5>
+
+                <!-- Team + position -->
+                <p class="text-muted mb-2">
+                    {{ player.position.name }} · {{ player.team.name }}
+                </p>
+
+                <!-- Stats -->
+                <div class="d-flex justify-content-center gap-2 mb-3">
+                    <span class="badge bg-primary">£{{ player.price|floatformat:1 }}</span>
+                    <span class="badge bg-success">{{ player.total_points }} pts</span>
+                </div>
+
+                <!-- Status badge -->
+                {% if player.status == "a" %}
+                    <span class="badge bg-success mb-2">Available</span>
+                {% elif player.status == "i" %}
+                    <span class="badge bg-danger mb-2">Injured</span>
+                {% elif player.status == "d" %}
+                    <span class="badge bg-warning text-dark mb-2">Doubtful</span>
+                {% else %}
+                    <span class="badge bg-secondary mb-2">Unavailable</span>
+                {% endif %}
+
+                <div class="mt-3">
+                    <a href="{% url 'player_details' player.fpl_id %}"
+                       class="btn btn-outline-primary btn-sm">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<a href="{% url 'squad' %}" class="btn btn-secondary mt-4">Back to Squad</a>
+
+<!-- JS for live filtering -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.getElementById("player-search");
+    const teamFilter = document.getElementById("team-filter");
+    const positionFilter = document.getElementById("position-filter");
+    const cards = document.querySelectorAll(".player-card");
+
+    function filterPlayers() {
+        const query = searchInput.value.toLowerCase();
+        const team = teamFilter.value.toLowerCase();
+        const position = positionFilter.value.toLowerCase();
+
+        cards.forEach(card => {
+            const first = card.dataset.first;
+            const second = card.dataset.second;
+            const web = card.dataset.web;
+            const rowTeam = card.dataset.team;
+            const rowPos = card.dataset.position;
+
+            const matchesName = first.includes(query) || second.includes(query) || web.includes(query);
+            const matchesTeam = !team || rowTeam === team;
+            const matchesPos = !position || rowPos === position;
+
+            card.style.display = (matchesName && matchesTeam && matchesPos) ? "" : "none";
+        });
+    }
+
+    searchInput.addEventListener("input", filterPlayers);
+    teamFilter.addEventListener("change", filterPlayers);
+    positionFilter.addEventListener("change", filterPlayers);
+});
+</script>
+{% endblock %}
